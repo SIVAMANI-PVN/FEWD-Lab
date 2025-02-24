@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+</head>
+<body>
+    <h1>Your Cart</h1>
+
+    <table class="cart-table">
+        <tr>
+            <th>Dish Name</th>
+            <th>Price</th>
+        </tr>
+
+        <tbody id="cart-items">
+            
+        </tbody>
+    </table>
+
+    <script>
+        window.onload = function() {
+            let cart = JSON.parse(localStorage.getItem("cart"));
+            let cartItemsContainer = document.getElementById("cart-items");
+
+            if (cart && cart.length > 0) {
+                cart.forEach(item => {
+                    let row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${item.item}</td>
+                        <td>$${item.price}</td>
+                    `;
+                    cartItemsContainer.appendChild(row);
+                });
+            } else {
+                cartItemsContainer.innerHTML = "<tr><td colspan='2'>Your cart is empty!</td></tr>";
+            }
+        }
+    </script>
+
+</body>
+</html>
