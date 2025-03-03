@@ -1,26 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875em;
+        }
+    </style>
 </head>
+
 <body class="bg-light">
     <div class="container py-5">
         <h2 class="text-center text-primary mb-4">Feedback Form</h2>
-        <form class="bg-white p-4 rounded shadow">
+        <form class="bg-white p-4 rounded shadow" onsubmit="return validateForm()">
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" id="name" name="name" class="form-control" required>
+                <input type="text" id="name" name="name" class="form-control"
+                    pattern="[A-Za-z\s]{3,30}" title="Name should be 3-30 characters long and contain only letters and spaces." required>
+                <div id="name-error" class="error-message"></div>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" id="email" name="email" class="form-control" required>
+                <div id="email-error" class="error-message"></div>
             </div>
             <div class="mb-3">
                 <label for="phone" class="form-label">Phone</label>
-                <input type="tel" id="phone" name="phone" class="form-control" required>
+                <input type="tel" id="phone" name="phone" class="form-control"
+                    pattern="[0-9]{10}" title="Phone number should be exactly 10 digits." required>
+                <div id="phone-error" class="error-message"></div>
             </div>
             <div class="mb-3">
                 <label for="rating" class="form-label">Rating</label>
@@ -32,18 +45,57 @@
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
+                <div id="rating-error" class="error-message"></div>
             </div>
             <div class="mb-3">
                 <label for="questions" class="form-label">Questions</label>
-                <textarea id="questions" name="questions" rows="4" class="form-control"></textarea>
+                <textarea id="questions" name="questions" rows="4" class="form-control"
+                    minlength="10" maxlength="200" title="Questions should be 10-200 characters."></textarea>
+                <div id="questions-error" class="error-message"></div>
             </div>
             <div class="mb-3">
                 <label for="comments" class="form-label">Additional Comments (Optional)</label>
-                <textarea id="comments" name="comments" rows="3" class="form-control"></textarea>
+                <textarea id="comments" name="comments" rows="3" class="form-control"
+                    maxlength="300" title="Comments can be up to 300 characters."></textarea>
+                <div id="comments-error" class="error-message"></div>
             </div>
             <button type="submit" class="btn btn-primary w-100">Submit</button>
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function validateForm() {
+            let isValid = true;
+            const name = document.getElementById("name").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const questions = document.getElementById("questions").value.trim();
+            const rating = document.getElementById("rating").value;
+
+            // Clear previous error messages
+            document.getElementById("name-error").textContent = "";
+            document.getElementById("phone-error").textContent = "";
+            document.getElementById("questions-error").textContent = "";
+            document.getElementById("rating-error").textContent = "";
+
+            if (!/^[A-Za-z\s]{3,30}$/.test(name)) {
+                document.getElementById("name-error").textContent = "Name should be 3-30 characters long and contain only letters and spaces.";
+                isValid = false;
+            }
+            if (!/^\d{10}$/.test(phone)) {
+                document.getElementById("phone-error").textContent = "Phone number should be exactly 10 digits.";
+                isValid = false;
+            }
+            if (questions && (questions.length < 10 || questions.length > 200)) {
+                document.getElementById("questions-error").textContent = "Questions should be 10-200 characters.";
+                isValid = false;
+            }
+            if (rating === "") {
+                document.getElementById("rating-error").textContent = "Please select a rating.";
+                isValid = false;
+            }
+            return isValid;
+        }
+    </script>
 </body>
+
 </html>
